@@ -1,0 +1,209 @@
+{% extends base_layout %}
+{% block mediaCSS %}
+{% block title %}
+        
+{% endblock %}
+{% block header_title %}
+        
+{% endblock %}
+{% block header_title_lead %}
+{% endblock %}
+{% block subnavbar %}
+{% endblock %}
+{% endblock %}
+{% block content %}
+<form id="simplify-payment-form" action="" method="POST">
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
+    <div>
+        <label>Card Owner Name </label>
+        <input id="cc-ownername" name="ownername" type="text" maxlength="20" autocomplete="off" value="Alejandro Santamaria Arza" autofocus />
+    </div>
+    <div>
+        <label>Email </label>
+        <input id="cc-email" name='email' type="text" maxlength="20" autocomplete="off" value="alex@shoelovers.co" autofocus />
+    </div>
+    <div>
+        <label>Address (1) </label>
+        <input id="cc-address1" type="text" maxlength="20" autocomplete="off" value="1055 Rollins Rd." autofocus />
+    </div>
+    <div>
+        <label>Address (2) </label>
+        <input id="cc-address2" type="text" maxlength="20" autocomplete="off" value="Aptmt. 008-201" autofocus />
+    </div>
+    <div>
+        <label>Country </label>
+         <select id="cc-country">
+            <option value="US">US</option>
+         </select> 
+    </div>
+     <div>
+        <label>City </label>
+        <input id="cc-city" type="text" maxlength="20" autocomplete="off" value="Burlingame" autofocus />
+    </div>
+    <div>
+        <label>State </label>
+        <select id="cc-state">
+            <option value="AL">Alabama</option>
+            <option value="AK">Alaska</option>
+            <option value="AZ">Arizona</option>
+            <option value="AR">Arkansas</option>
+            <option value="CA" selected>California</option>
+            <option value="CO">Colorado</option>
+            <option value="CT">Connecticut</option>
+            <option value="DE">Delaware</option>
+            <option value="DC">District Of Columbia</option>
+            <option value="FL">Florida</option>
+            <option value="GA">Georgia</option>
+            <option value="HI">Hawaii</option>
+            <option value="ID">Idaho</option>
+            <option value="IL">Illinois</option>
+            <option value="IN">Indiana</option>
+            <option value="IA">Iowa</option>
+            <option value="KS">Kansas</option>
+            <option value="KY">Kentucky</option>
+            <option value="LA">Louisiana</option>
+            <option value="ME">Maine</option>
+            <option value="MD">Maryland</option>
+            <option value="MA">Massachusetts</option>
+            <option value="MI">Michigan</option>
+            <option value="MN">Minnesota</option>
+            <option value="MS">Mississippi</option>
+            <option value="MO">Missouri</option>
+            <option value="MT">Montana</option>
+            <option value="NE">Nebraska</option>
+            <option value="NV">Nevada</option>
+            <option value="NH">New Hampshire</option>
+            <option value="NJ">New Jersey</option>
+            <option value="NM">New Mexico</option>
+            <option value="NY">New York</option>
+            <option value="NC">North Carolina</option>
+            <option value="ND">North Dakota</option>
+            <option value="OH">Ohio</option>
+            <option value="OK">Oklahoma</option>
+            <option value="OR">Oregon</option>
+            <option value="PA">Pennsylvania</option>
+            <option value="RI">Rhode Island</option>
+            <option value="SC">South Carolina</option>
+            <option value="SD">South Dakota</option>
+            <option value="TN">Tennessee</option>
+            <option value="TX">Texas</option>
+            <option value="UT">Utah</option>
+            <option value="VT">Vermont</option>
+            <option value="VA">Virginia</option>
+            <option value="WA">Washington</option>
+            <option value="WV">West Virginia</option>
+            <option value="WI">Wisconsin</option>
+            <option value="WY">Wyoming</option>
+        </select>           
+    </div>
+    <div>
+        <label>Zip Code </label>
+        <input id="cc-zip" type="text" maxlength="20" autocomplete="off" value="94010" autofocus />
+    </div>
+    <div>
+        <label>Credit Card Number: </label>
+        <input id="cc-number" type="text" maxlength="20" autocomplete="off" value="5105105105105100" autofocus />
+    </div>
+    <div>
+        <label>CVC: </label>
+        <input id="cc-cvc" type="text" maxlength="4" autocomplete="off" value="123"/>
+    </div>
+    <div>
+        <label>Expiry Date: </label>
+        <select id="cc-exp-month">
+            <option value="01">Jan</option>
+            <option value="02">Feb</option>
+            <option value="03">Mar</option>
+            <option value="04">Apr</option>
+            <option value="05">May</option>
+            <option value="06">Jun</option>
+            <option value="07">Jul</option>
+            <option value="08">Aug</option>
+            <option value="09">Sep</option>
+            <option value="10">Oct</option>
+            <option  value="11" selected>Nov</option>
+            <option value="12">Dec</option>
+        </select>
+        <select id="cc-exp-year">
+            <option value="13">2013</option>
+            <option value="14">2014</option>
+            <option value="15">2015</option>
+            <option value="16">2016</option>
+            <option value="17">2017</option>
+            <option value="18">2018</option>
+            <option value="19" selected>2019</option>
+            <option value="20">2020</option>
+            <option value="21">2021</option>
+            <option value="22">2022</option>
+        </select>
+    </div>
+    <button id="process-payment-btn" type="submit">Add card</button>
+</form>
+{% block mediaJS %}
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://www.simplify.com/commerce/v1/simplify.js"></script>
+<script>
+$(document).ready(function() {
+    $("#simplify-payment-form").on("submit", function() {
+        // Disable the submit button
+        $("#process-payment-btn").attr("disabled", "disabled");
+        // Generate a card token & handle the response
+        SimplifyCommerce.generateToken({
+            key: "sbpb_MzUxMDVmMDEtZTI5Ni00YjI2LTkyMTAtODhjZGYyMzA3ZWNl",
+            card: {
+                number: $("#cc-number").val(),
+                cvc: $("#cc-cvc").val(),
+                expMonth: $("#cc-exp-month").val(),
+                expYear: $("#cc-exp-year").val(),
+                addressCity:$("#cc-city").val(),
+                addressCountry:$("#cc-country").val(),
+                addressLine1:$("#cc-address1").val(),
+                addressLine2:$("#cc-address2").val(),
+                addressState:$("#cc-state").val(),
+                addressZip:$("#cc-zip").val(),
+                name:$("#cc-ownername").val(),
+            }
+        }, simplifyResponseHandler);
+        // Prevent the form from submitting
+        return false;
+    });
+
+    
+});
+
+function simplifyResponseHandler(data) {
+    var $paymentForm = $("#simplify-payment-form");
+    // Remove all previous errors
+    $(".error").remove();
+    // Check for errors
+    if (data.error) {
+        // Show any validation errors
+        if (data.error.code == "validation") {
+            var fieldErrors = data.error.fieldErrors,
+                fieldErrorsLength = fieldErrors.length,
+                errorList = "";
+            for (var i = 0; i < fieldErrorsLength; i++) {
+                errorList += "<div class='error'>Field: '" + fieldErrors[i].field +
+                             "' is invalid - " + fieldErrors[i].message + "</div>";
+            }
+            // Display the errors
+            $paymentForm.after(errorList);
+        }
+        // Re-enable the submit button
+        $("#process-payment-btn").removeAttr("disabled");
+    } else {
+        // The token contains id, last4, and card type
+        var token = data["id"];
+        // Insert the token into the form so it gets submitted to the server
+        $paymentForm.append("<input type='hidden' name='simplifyToken' value='" + token + "' />");
+        // Submit the form to the server
+        $paymentForm.get(0).submit();
+    }
+}
+
+
+
+</script>
+{% endblock %}
+
+{% endblock %}

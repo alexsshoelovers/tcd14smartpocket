@@ -1,0 +1,20 @@
+{% extends base_layout %}
+{% block mediaCSS %}
+{% block title %}
+        
+{% endblock %}
+{% block header_title %}
+        
+{% endblock %}
+{% block header_title_lead %}
+{% endblock %}
+{% block subnavbar %}
+{% endblock %}
+{% endblock %}
+{% block content %}
+{% for card in cards %}
+	<table class="table">
+		<tr><td><a href='/pay/?cardId={{ card.cardId }}'>Pay</a></td><td>{{ card.cardEnding }}</td><td>{{ card.cardName }}</td><td>{{ card.cardType }}</td><td><img height="40px" src="http://www.mastercard.com/global/_assets/img/products/standard-cc-intro.png"></td><td>{{ card.email}}</td></tr>
+	</table>
+{% endfor %}
+{% endblock %}

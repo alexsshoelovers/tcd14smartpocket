@@ -1,0 +1,35 @@
+{% extends base_layout %}
+{% block mediaCSS %}
+{% block title %}
+        
+{% endblock %}
+{% block header_title %}
+        
+{% endblock %}
+{% block header_title_lead %}
+{% endblock %}
+{% block subnavbar %}
+{% endblock %}
+{% endblock %}
+{% block content %}
+<form id="simplify-payment-form" action="" method="POST">
+    {% for data in cards %}
+    <h1>{{ data.cardType }} ending in: {{ data.cardEnding }}</h1>
+   
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
+    <input class="form-control" id="amount" name="amount" type="text" value="550.00">
+    <input type="hidden" name="cardId" id="cardId">
+    <input type="hidden" name="customerId" id="customerId" value="{{ data.customerId }}">
+    <button id="process-payment-btn" type="submit">Confirm Payment</button>
+    {% endfor %}
+</form>
+
+{% block mediaJS %}
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://www.simplify.com/commerce/v1/simplify.js"></script>
+<script>
+
+</script>
+{% endblock %}
+
+{% endblock %}
