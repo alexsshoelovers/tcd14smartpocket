@@ -20,6 +20,9 @@ _routes = [
     RedirectRoute('/list_cards/', handlers.ListCardsHandler, name='list_cards', strict_slash=True),
     RedirectRoute('/pay/', handlers.PaymentHandler, name='pay_with_card', strict_slash=True),
     RedirectRoute('/load_database/', handlers.LoadDatabaseHandler, name='load_database', strict_slash=True),
+    RedirectRoute('/sample/', handlers.SampleHandler, name='sample_handler', strict_slash=True),
+    RedirectRoute('/addProduct/', handlers.AddProductHandler, name='addProduct', strict_slash=True),
+    RedirectRoute('/getCart/', handlers.GetCartHandler, name='getCart', strict_slash=True),
 ]
 
 def get_routes():

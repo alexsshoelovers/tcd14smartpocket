@@ -29,3 +29,8 @@ class SampleProduct(ndb.Model):
 	price=ndb.StringProperty()
 	category=ndb.StringProperty()
 	brand=ndb.StringProperty()
+
+class Cart(ndb.Model):
+	name=ndb.StringProperty()
+	image=ndb.StringProperty()
+	price=ndb.StringProperty()

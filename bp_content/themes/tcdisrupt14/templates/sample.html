@@ -1,0 +1,58 @@
+{% extends base_layout %}
+{% block mediaCSS %}
+{% block title %}
+        
+{% endblock %}
+{% block header_title %}
+        
+{% endblock %}
+{% block header_title_lead %}
+{% endblock %}
+{% block subnavbar %}
+{% endblock %}
+{% endblock %}
+{% block content %}
+<div class="hero" style="text-align:center">
+	<img id="imgScanner" width="80%" src="/{{ theme }}/img/barcode1.jpg" style="display:none;">
+	<div style="text-align:center;width:100%">
+		<p id="strprice" style="font-weight:bold;display:none;">$ 50.00</p>
+	</div>
+</div>
+<div id="divscanpay" style="position:fixed; bottom:0px;width:100%;padding:5px 40px 5px 40px;" class="">
+	<div type="button" id="btnScan" class="btn btn-primary btn-lg btn-block" onclick="scan(); return false;">Scan</div><div type="button" class="btn btn-primary btn-lg btn-block" id="btnPay" onclick="pay(); return false;">Pay</div>
+</div>
+<div id="divaddcancel" style="position:fixed; bottom:0px;width:100%;padding:5px 40px 5px 40px;display:none;" class="">
+	<div type="button" id="btnScan" class="btn btn-primary btn-lg btn-block" onclick="addproduct(); return false;">Add</div><div type="button" class="btn btn-primary btn-lg btn-block" id="btnPay" onclick="canceladdproduct(); return false;">Cancel</div>
+</div>
+{% endblock %}
+{% block mediaJS %}
+<script>
+function scan(){
+
+	$( "#imgScanner" ).attr({src: "/{{ theme }}/img/spinner.gif"});
+	$("#imgScanner").show();
+	setTimeout(function(){
+		$( "#imgScanner" ).attr({src: "/{{ theme }}/img/barcode1.jpg"});
+		setTimeout(function(){
+			$( "#imgScanner" ).attr({src: "/{{ theme }}/img/spinner.gif"});
+			setTimeout(function(){
+				$( "#imgScanner" ).attr({src: "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcTUIn5q_55D-0C4Ees1x-_Ob-3GiNzbuhHguPN4WiYjIaOFibQJJUbo-48MBS2T5a-_x3a-lGce&usqp=CAk"});
+				$("#strprice").show();
+				$('#divscanpay').hide();
+				$('#divaddcancel').show();
+			}, 1500);
+		}, 1500);
+
+	}, 2000);
+}
+function pay(){
+	alert('pay');	
+}
+function addproduct(){
+
+}
+
+function 
+
+</script>
+{% endblock %}

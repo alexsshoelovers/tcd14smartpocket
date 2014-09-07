@@ -446,23 +446,52 @@ class LoadDatabaseHandler(BaseHandler):
                 "Amsoil"
             ])
         image=set([
-                "http://product.okfn.org.s3.amazonaws.com/images/gtin/gtin-001/0010369680102.jpg",
-                "http://product.okfn.org.s3.amazonaws.com/images/gtin/gtin-001/0010409281702.jpg",
-                "http://product.okfn.org.s3.amazonaws.com/images/gtin/gtin-001/0010457880902.jpg",
-                "http://product.okfn.org.s3.amazonaws.com/images/gtin/gtin-001/0010481780902.jpg",
-                "http://product.okfn.org.s3.amazonaws.com/images/gtin/gtin-001/0010491680902.jpg",
-                "http://product.okfn.org.s3.amazonaws.com/images/gtin/gtin-000/0009131481702.jpg",
-                "http://product.okfn.org.s3.amazonaws.com/images/gtin/gtin-000/0009271464344.jpg",
-                "http://product.okfn.org.s3.amazonaws.com/images/gtin/gtin-000/0009670980902.jpg",
-                "http://product.okfn.org.s3.amazonaws.com/images/gtin/gtin-001/0010139380102.jpg",
-                "http://product.okfn.org.s3.amazonaws.com/images/gtin/gtin-001/0010685231002.jpg"
+                "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcTUIn5q_55D-0C4Ees1x-_Ob-3GiNzbuhHguPN4WiYjIaOFibQJJUbo-48MBS2T5a-_x3a-lGce&usqp=CAk",
+                "https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcSSERj9nCsY6ZkOdvrLCtzdql9L4_xqqL3otNyA1vszUVt1y5coVPhqvxv3aPecpCauOrPbVGpc&usqp=CAk",
+                "https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcSNl-FxupU76d8MNsPZVOemHG4KBriYx3x62f0DY-cbOICUpc05O9vv5lZPhM7Yf6MpdDqi6_x0&usqp=CAk",
+                "https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcS-8cH-K-yCDdGJ7Aj4VEtUHKWvu-KCuFctUs4ZU0mpqtmasK9rsh67cIGVZzwUcXctCnCSoNjX&usqp=CAk",
+                "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcSxF3llTUztRQNrh36jaSaizFLWTqkIgmzwzV7buVgH469x6qMRl8HruQPkfmZGvzBS2mpgKke8&usqp=CAk",
+                "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcSjIxC_kSCN3SqC2dpaHeJfO3LBhnzmam_xLEY0Y3oWLneyClcA&usqp=CAk",
+                "https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcTkJk7prgl33r8XOAcfCExMg0uDbY34jLRxrmXVNLzy465XLPD-&usqp=CAk",
+                "https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcRpY3lnllm4zQG6jH6dKl0-1QKV58XwhpGg47CYxAPU8dJw0_CpFWAK4PXGvkwTdhSBCCsJ0QRPrg&usqp=CAk",
+                "https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcSHY9E7ZnkSeXx2kfwgdLLobfKoHI5inPfhyjKpjrKcniim3c_p&usqp=CAk",
+                "https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcSwN3SqkJ3G9UpMgEIOJUNeGoNksXuGn_r-ZCx9oCTy4pfw2TddNun-dVBF0kOgipvxzcvzbEgh&usqp=CAk"
             ])
         r_code=random.sample(code,1)[0]
         r_name=random.sample(description,1)[0]
         r_image=random.sample(image,1)[0]
-        r_price=str(random.sample(price,1)[0])
+        r_price=str(random.sample(price
+            ,1)[0])
         r_category=category
         r_brand=random.sample(brand,1)[0]
         product=models.SampleProduct(code=r_code, name=r_name, image=r_image, price=r_price, category=r_category, brand=r_brand)
         product.put()
         self.response.out.write(json.dumps(product.to_dict()))
+
+class SampleHandler(BaseHandler):
+    def get(self):
+        params={}
+        self.render_template('sample.html',**params)
+
+class AddProductHandler(BaseHandler):
+    def get(self):
+        params={}
+        name=self.request.get('name')
+        image=self.request.get('image')
+        price=self.request.get('price')
+        addtocart=models.Cart(name=name, image=image, price=price)
+        addtocart.put()
+
+class GetCartHandler(BaseHandler):
+    def get(self):
+        params={}
+        cartproducts=models.Cart.query().fetch()
+        self.response.headers['Content-Type'] = 'application/json'
+        resjson=[]
+        for prod in cartproducts:
+            resjson.append({"name":prod.name,"image":prod.image,"price":prod.price})
+
+        resfinal = json.dumps(resjson)
+        self.response.out.write(resfinal)
+
+
