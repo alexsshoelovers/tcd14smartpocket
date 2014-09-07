@@ -35,3 +35,4 @@ class Cart(ndb.Model):
 	name=ndb.StringProperty()
 	image=ndb.StringProperty()
 	price=ndb.StringProperty()
+	

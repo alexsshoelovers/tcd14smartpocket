@@ -12,21 +12,24 @@
 {% endblock %}
 {% endblock %}
 {% block content %}
+<p style="text-align:center;font-weight:bold;">
+	TOTAL: $ {{ total }}
+</p>
 {% for product in cartproducts %}
 <table class="table">
 	<tr><td><img height="40px" src="{{ product.image }}"></td><td>{{ product.name }}</td><td>${{ product.price }}</td></tr>
 </table>
-<p style="text-align:center;font-weight:bold;">
-	TOTAL: $ {{ total }}
-</p>
+
 <form id="formaPago" action="/pay/" method="post">
 	<input type="hidden" value="{{ userId }}" name="customerId">
 	<input type="hidden" value="{{ total }}" name="amount">
 </form>
+
+{% endfor %}
+
 <div id="divaddcancel" style="position:fixed; bottom:0px;width:100%;padding:5px 40px 5px 40px;" class="">
 	<div type="button" id="btnScan" class="btn btn-primary btn-lg btn-block" onclick="continueProcess(); return false;">Continue</div><div type="button" class="btn btn-primary btn-lg btn-block" id="btnPay" onclick="cancel(); return false;">Cancel</div>
 </div>
-{% endfor %}
 {% endblock %}
 {% block mediaJS %}
 <script>

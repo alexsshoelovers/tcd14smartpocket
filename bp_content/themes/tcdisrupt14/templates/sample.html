@@ -57,7 +57,12 @@ function cambiarestado(){
 
 }
 function addproduct(){
-	cambiarestado();
+	$.ajax({
+	  url: "/simulateInsert/"
+	}).done(function() {
+		cambiarestado(); 
+	});
+	
 }
 
 function canceladdproduct(){

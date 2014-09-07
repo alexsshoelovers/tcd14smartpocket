@@ -453,6 +453,81 @@ class PaymentHandler(BaseHandler):
         else:
             return self.redirect_to('sample_handler')
 
+def createProduct():
+    price=set([
+            50.3,
+            25.6,
+            42.8,
+            33.0,
+            8.99,
+            25.5,
+            60.0,
+            15.5,
+            20.99,
+            40.5
+        ])
+    description = set([
+            "Addict Ultra Gloss #256 Negligee Pink Christian Lip Color Addict Ultra Gloss",
+            "Ombre Duo Lumiere No. 27 Golden Pink Precious Bronze",
+            "Ombre Absolue Palette Radiant Smoothing Eye Shadow Quad # A40 Chant De Lavandes 4x",
+            "L' Absolu Rouge Spf 12 No. 173 Rouge Preciosa",
+            "Teint Renergie Lift R.a.r.e. Foundation Spf 20 # 06 Beige Cannelle Complexion Teint Renergie Lift R.a.r.e. Foundation Spf 20",
+            "Pure Lip Gloss No. 06 Pure Plum Ysl Lip Color Pure Lip Gloss",
+            "Men Grip Tight Firm Hold Gel",
+            "96709 Le Lipstique Lip Colouring Stick With Brush No. Alpine Glow For Women Lip Color Unboxed Us Version",
+            "show Extase Flash Plumping Mascara # 090 Black Extase",
+            "Luminous Silk Foundation # 5 Warm Beige",
+            "Le Crayon Khol Le Bleu De Jim Unboxed Us Version"
+        ])
+    code = set([
+                "0010369680102",
+                "0010409281702",
+                "0010457880902",
+                "0010481780902",
+                "0010491680902",
+                "0009131481702",
+                "0009271464344",
+                "0009670980902",
+                "0010139380102",
+                "0010685231002",
+        ])
+    category='Beauty - Personal Care - Hygiene'
+    brand=set([
+            "Revlon",
+            "Helen of Troy L.P.",
+            "Pacific World Corp",
+            "Colomer",
+            "Amsoil"
+        ])
+    image=set([
+            "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcTUIn5q_55D-0C4Ees1x-_Ob-3GiNzbuhHguPN4WiYjIaOFibQJJUbo-48MBS2T5a-_x3a-lGce&usqp=CAk",
+            "https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcSSERj9nCsY6ZkOdvrLCtzdql9L4_xqqL3otNyA1vszUVt1y5coVPhqvxv3aPecpCauOrPbVGpc&usqp=CAk",
+            "https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcSNl-FxupU76d8MNsPZVOemHG4KBriYx3x62f0DY-cbOICUpc05O9vv5lZPhM7Yf6MpdDqi6_x0&usqp=CAk",
+            "https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcS-8cH-K-yCDdGJ7Aj4VEtUHKWvu-KCuFctUs4ZU0mpqtmasK9rsh67cIGVZzwUcXctCnCSoNjX&usqp=CAk",
+            "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcSxF3llTUztRQNrh36jaSaizFLWTqkIgmzwzV7buVgH469x6qMRl8HruQPkfmZGvzBS2mpgKke8&usqp=CAk",
+            "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcSjIxC_kSCN3SqC2dpaHeJfO3LBhnzmam_xLEY0Y3oWLneyClcA&usqp=CAk",
+            "https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcTkJk7prgl33r8XOAcfCExMg0uDbY34jLRxrmXVNLzy465XLPD-&usqp=CAk",
+            "https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcRpY3lnllm4zQG6jH6dKl0-1QKV58XwhpGg47CYxAPU8dJw0_CpFWAK4PXGvkwTdhSBCCsJ0QRPrg&usqp=CAk",
+            "https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcSHY9E7ZnkSeXx2kfwgdLLobfKoHI5inPfhyjKpjrKcniim3c_p&usqp=CAk",
+            "https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcSwN3SqkJ3G9UpMgEIOJUNeGoNksXuGn_r-ZCx9oCTy4pfw2TddNun-dVBF0kOgipvxzcvzbEgh&usqp=CAk"
+        ])
+    r_code=random.sample(code,1)[0]
+    r_name=random.sample(description,1)[0]
+    r_image=random.sample(image,1)[0]
+    r_price=str(random.sample(price
+        ,1)[0])
+    r_category=category
+    r_brand=random.sample(brand,1)[0]
+    product=models.SampleProduct(code=r_code, name=r_name, image=r_image, price=r_price, category=r_category, brand=r_brand)
+    product.put()
+    resproduct={"key":product.key.urlsafe(),"code":r_code,"name":r_name,"image":r_image,"price":r_price,"category":r_category,"brand":r_brand}
+    cartproduct=models.Cart(productId=product.key.urlsafe(),name=r_name,image=r_image,price=r_price)
+    cartproduct.put()
+
+
+class simulateInsertHandler(BaseHandler):
+    def get(self):
+        product = createProduct()
 
 class LoadDatabaseHandler(BaseHandler):
     def get(self):

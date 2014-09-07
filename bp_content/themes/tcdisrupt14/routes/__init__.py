@@ -25,6 +25,7 @@ _routes = [
     RedirectRoute('/addProduct/', handlers.AddProductHandler, name='addProduct', strict_slash=True),
     RedirectRoute('/getCart/', handlers.GetCartHandler, name='getCart', strict_slash=True),
     RedirectRoute('/getPaymentData/', handlers.getPaymentDataHandler, name='getPaymentData', strict_slash=True),
+    RedirectRoute('/simulateInsert/', handlers.simulateInsertHandler, name='simulateInsert', strict_slash=True),
 ]
 
 def get_routes():
