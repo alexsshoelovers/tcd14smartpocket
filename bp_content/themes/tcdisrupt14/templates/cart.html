@@ -23,6 +23,7 @@
 <form id="formaPago" action="/pay/" method="post">
 	<input type="hidden" value="{{ userId }}" name="customerId">
 	<input type="hidden" value="{{ total }}" name="amount">
+	<input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
 </form>
 
 {% endfor %}

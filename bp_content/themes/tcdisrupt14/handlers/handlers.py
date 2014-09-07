@@ -374,7 +374,12 @@ class PaymentGetHandler(BaseHandler):
         params ={}
         format=self.request.get('json')
         amount=self.request.get('amount','0')
-        f_amount=float(amount)
+        cartproducts=models.Cart.query().fetch()
+        total=0
+        for prod in cartproducts:
+            total = total + float(prod.price)
+
+        f_amount=float(total)
         if f_amount>0:
             amount="%.2f" % (f_amount *100)
             cardId=self.request.get('cardId')
@@ -402,9 +407,12 @@ class PaymentGetHandler(BaseHandler):
                 logging.info(payment)
             logging.info('PARAMS: %s' % params)
             deleteCart()
+            self.response.headers['Content-Type'] = 'application/json'
             self.response.out.write(json.dumps(params))
         else:
-            return self.redirect_to('sample_handler')
+            self.response.headers['Content-Type'] = 'application/json'
+            params['pay_message']="Payment not approved"
+            self.response.out.write(json.dumps(params))
 
 class PaymentHandler(BaseHandler):
     def get(self):
