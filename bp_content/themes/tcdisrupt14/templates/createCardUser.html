@@ -13,33 +13,41 @@
 {% endblock %}
 {% block content %}
 <form id="simplify-payment-form" action="" method="POST">
+    <table class="table">
     <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
+    <tr><td>
     <div>
         <label>Card Owner Name </label>
         <input id="cc-ownername" name="ownername" type="text" maxlength="20" autocomplete="off" value="Alejandro Santamaria Arza" autofocus />
     </div>
+    </td></tr><tr><td>
     <div>
         <label>Email </label>
         <input id="cc-email" name='email' type="text" maxlength="20" autocomplete="off" value="alex@shoelovers.co" autofocus />
     </div>
+    </td></tr><tr><td>
     <div>
         <label>Address (1) </label>
         <input id="cc-address1" type="text" maxlength="20" autocomplete="off" value="1055 Rollins Rd." autofocus />
     </div>
+    </td></tr><tr><td>
     <div>
         <label>Address (2) </label>
         <input id="cc-address2" type="text" maxlength="20" autocomplete="off" value="Aptmt. 008-201" autofocus />
     </div>
+    </td></tr><tr><td>
     <div>
         <label>Country </label>
          <select id="cc-country">
             <option value="US">US</option>
          </select> 
     </div>
+    </td></tr><tr><td>
      <div>
         <label>City </label>
         <input id="cc-city" type="text" maxlength="20" autocomplete="off" value="Burlingame" autofocus />
     </div>
+    </td></tr><tr><td>
     <div>
         <label>State </label>
         <select id="cc-state">
@@ -96,18 +104,22 @@
             <option value="WY">Wyoming</option>
         </select>           
     </div>
+    </td></tr><tr><td>
     <div>
         <label>Zip Code </label>
         <input id="cc-zip" type="text" maxlength="20" autocomplete="off" value="94010" autofocus />
     </div>
+    </td></tr><tr><td>
     <div>
         <label>Credit Card Number: </label>
         <input id="cc-number" type="text" maxlength="20" autocomplete="off" value="5105105105105100" autofocus />
     </div>
+    </td></tr><tr><td>
     <div>
         <label>CVC: </label>
         <input id="cc-cvc" type="text" maxlength="4" autocomplete="off" value="123"/>
     </div>
+    </td></tr><tr><td>
     <div>
         <label>Expiry Date: </label>
         <select id="cc-exp-month">
@@ -137,7 +149,10 @@
             <option value="22">2022</option>
         </select>
     </div>
-    <button id="process-payment-btn" type="submit">Add card</button>
+    </td></tr><tr><td style="text-align:right;">
+    <button class="btn btn-success" id="process-payment-btn" type="submit">Add card</button>
+    </td></tr><tr>
+    </table>
 </form>
 {% block mediaJS %}
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>

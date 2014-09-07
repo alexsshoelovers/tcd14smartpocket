@@ -13,7 +13,7 @@
 {% endblock %}
 {% block content %}
 <div class="hero" style="text-align:center">
-	<img id="imgScanner" width="80%" src="/{{ theme }}/img/barcode1.jpg" style="display:none;">
+	<img id="imgScanner" width="200px" src="/{{ theme }}/img/icon-scann.png" style="">
 	<div style="text-align:center;width:100%">
 		<p id="strprice" style="font-weight:bold;display:none;">$ 50.00</p>
 	</div>
@@ -46,13 +46,24 @@ function scan(){
 	}, 2000);
 }
 function pay(){
-	alert('pay');	
+	window.location.href='/getCart/?format=html';	
+}
+function cambiarestado(){
+	$("#divaddcancel").hide();
+	$('#divscanpay').show();
+	$( "#imgScanner" ).attr({src: "/{{ theme }}/img/icon-scann.png"});
+	//$( "#imgScanner" ).hide();
+	$("#strprice").hide();
+
 }
 function addproduct(){
-
+	cambiarestado();
 }
 
-function 
+function canceladdproduct(){
+	cambiarestado();
+
+}
 
 </script>
 {% endblock %}

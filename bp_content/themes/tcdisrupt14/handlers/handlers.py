@@ -363,6 +363,49 @@ class ListCardsHandler(BaseHandler):
         else:
             return self.render_template('cardsList.html', **params)
         
+
+def deleteCart():
+    products= models.Cart.query()
+    for product in products:
+        product.key.delete()
+
+class PaymentGetHandler(BaseHandler):
+    def get(self):
+        params ={}
+        format=self.request.get('json')
+        amount=self.request.get('amount','0')
+        f_amount=float(amount)
+        if f_amount>0:
+            amount="%.2f" % (f_amount *100)
+            cardId=self.request.get('cardId')
+            userId=self.request.get('customerId')
+            logging.info("AMOUNT: %s" % amount)
+            logging.info("CUSTOMERID: %s" % userId)
+            simplify.public_key = "sbpb_MzUxMDVmMDEtZTI5Ni00YjI2LTkyMTAtODhjZGYyMzA3ZWNl"
+            simplify.private_key = "aLnp4PbmCnsi67GeSAq8ipEtR/SkBzhgCCJ4OgWiduh5YFFQL0ODSXAOkNtXTToq"
+             
+            payment = simplify.Payment.create({
+                    "amount" : amount,
+                    "customer" : userId,
+                    "description" : "SmartPocket",
+                    "reference" : "7a6ef6be31",
+                    "currency" : "USD"
+             
+            })
+            
+            if payment.paymentStatus == 'APPROVED':
+                logging.info( "Payment approved")
+                params['pay_message']="Payment approved"
+            else:
+                logging.info( "Payment not approved")
+                params['pay_message']="Payment not approved"
+                logging.info(payment)
+            logging.info('PARAMS: %s' % params)
+            deleteCart()
+            self.response.out.write(json.dumps(params))
+        else:
+            return self.redirect_to('sample_handler')
+
 class PaymentHandler(BaseHandler):
     def get(self):
         params={}
@@ -375,28 +418,41 @@ class PaymentHandler(BaseHandler):
         return self.render_template('paymentform.html',**params)
 
     def post(self):
+        params ={}
+        format=self.request.get('json')
         amount=self.request.get('amount')
-        cardId=self.request.get('cardId')
-        userId=self.request.get('customerId')
-        logging.info("AMOUNT: %s" % amount)
-        logging.info("CUSTOMERID: %s" % userId)
-        simplify.public_key = "sbpb_MzUxMDVmMDEtZTI5Ni00YjI2LTkyMTAtODhjZGYyMzA3ZWNl"
-        simplify.private_key = "aLnp4PbmCnsi67GeSAq8ipEtR/SkBzhgCCJ4OgWiduh5YFFQL0ODSXAOkNtXTToq"
-         
-        payment = simplify.Payment.create({
-                "amount" : amount,
-                "customer" : userId,
-                "description" : "SmartPocket",
-                "reference" : "7a6ef6be31",
-                "currency" : "USD"
-         
-        })
-        
-        if payment.paymentStatus == 'APPROVED':
-            logging.info( "Payment approved")
+        if amount >0:
+            f_amount=float(amount)
+            amount="%.2f" % (f_amount *100)
+            cardId=self.request.get('cardId')
+            userId=self.request.get('customerId')
+            logging.info("AMOUNT: %s" % amount)
+            logging.info("CUSTOMERID: %s" % userId)
+            simplify.public_key = "sbpb_MzUxMDVmMDEtZTI5Ni00YjI2LTkyMTAtODhjZGYyMzA3ZWNl"
+            simplify.private_key = "aLnp4PbmCnsi67GeSAq8ipEtR/SkBzhgCCJ4OgWiduh5YFFQL0ODSXAOkNtXTToq"
+             
+            payment = simplify.Payment.create({
+                    "amount" : amount,
+                    "customer" : userId,
+                    "description" : "SmartPocket",
+                    "reference" : "7a6ef6be31",
+                    "currency" : "USD"
+             
+            })
+            
+            if payment.paymentStatus == 'APPROVED':
+                logging.info( "Payment approved")
+                params['pay_message']="Payment approved"
+            else:
+                logging.info( "Payment not approved")
+                params['pay_message']="Payment not approved"
+                logging.info(payment)
+            logging.info('PARAMS: %s' % params)
+            deleteCart()
+            self.render_template('fin_pago.html',**params)
         else:
-            logging.info( "Payment not approved")
-            logging.info(payment)
+            return self.redirect_to('sample_handler')
+
 
 class LoadDatabaseHandler(BaseHandler):
     def get(self):
@@ -466,7 +522,8 @@ class LoadDatabaseHandler(BaseHandler):
         r_brand=random.sample(brand,1)[0]
         product=models.SampleProduct(code=r_code, name=r_name, image=r_image, price=r_price, category=r_category, brand=r_brand)
         product.put()
-        self.response.out.write(json.dumps(product.to_dict()))
+        resproduct={"key":product.key.urlsafe(),"code":r_code,"name":r_name,"image":r_image,"price":r_price,"category":r_category,"brand":r_brand}
+        self.response.out.write(json.dumps(resproduct))
 
 class SampleHandler(BaseHandler):
     def get(self):
@@ -476,22 +533,46 @@ class SampleHandler(BaseHandler):
 class AddProductHandler(BaseHandler):
     def get(self):
         params={}
-        name=self.request.get('name')
-        image=self.request.get('image')
-        price=self.request.get('price')
-        addtocart=models.Cart(name=name, image=image, price=price)
+        key=self.request.get('key')
+        productkey = ndb.Key(urlsafe=key)
+        product = productkey.get()
+
+        addtocart=models.Cart(productId=key, name=product.name, image=product.image, price=product.price)
         addtocart.put()
 
 class GetCartHandler(BaseHandler):
     def get(self):
         params={}
+        format=self.request.get('format','json')
+
         cartproducts=models.Cart.query().fetch()
-        self.response.headers['Content-Type'] = 'application/json'
+        
         resjson=[]
+        total=0
         for prod in cartproducts:
-            resjson.append({"name":prod.name,"image":prod.image,"price":prod.price})
+            total = total + float(prod.price)
+            resjson.append({"key": prod.key.urlsafe(),"name":prod.name,"image":prod.image,"price":prod.price})
 
         resfinal = json.dumps(resjson)
-        self.response.out.write(resfinal)
+        if format=='html':
+            params['cartproducts']=resjson
+            params['total']=total
+            params['userId']=models.SmartPocketUserCard.query().fetch(1)[0].customerId
+            self.render_template('cart.html',**params)
+        else:
+            self.response.headers['Content-Type'] = 'application/json'
+            self.response.out.write(resfinal)
 
+class getPaymentDataHandler(BaseHandler):
+    def get(self):
+        cartproducts=models.Cart.query().fetch()
+        total=0
+        for prod in cartproducts:
+            total = total + float(prod.price)
+        self.response.headers['Content-Type'] = 'application/json'
+        self.response.out.write(json.dumps({"amount": total, "customerId":models.SmartPocketUserCard.query().fetch(1)[0].customerId}))
 
+class LandingHandler(BaseHandler):
+    def get(self):
+        params={}
+        return self.render_template('Landing.html', **params)

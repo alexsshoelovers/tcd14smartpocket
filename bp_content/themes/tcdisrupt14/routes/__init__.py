@@ -14,15 +14,17 @@ _routes = [
     RedirectRoute('/secure/', handlers.SecureRequestHandler, name='secure', strict_slash=True),
     RedirectRoute('/settings/delete_account', handlers.DeleteAccountHandler, name='delete-account', strict_slash=True),
     RedirectRoute('/contact/', handlers.ContactHandler, name='contact', strict_slash=True),
-    RedirectRoute('/', handlers.ContactHandler, name='contact', strict_slash=True),
+    RedirectRoute('/', handlers.LandingHandler, name='contact', strict_slash=True),
     RedirectRoute('/paymentform/', handlers.PaymentformHandler, name='paymentform', strict_slash=True),
     RedirectRoute('/add_card/', handlers.AddCardHandler, name='add_card', strict_slash=True),
     RedirectRoute('/list_cards/', handlers.ListCardsHandler, name='list_cards', strict_slash=True),
     RedirectRoute('/pay/', handlers.PaymentHandler, name='pay_with_card', strict_slash=True),
+    RedirectRoute('/payget/', handlers.PaymentGetHandler, name='payget_with_card', strict_slash=True),
     RedirectRoute('/load_database/', handlers.LoadDatabaseHandler, name='load_database', strict_slash=True),
     RedirectRoute('/sample/', handlers.SampleHandler, name='sample_handler', strict_slash=True),
     RedirectRoute('/addProduct/', handlers.AddProductHandler, name='addProduct', strict_slash=True),
     RedirectRoute('/getCart/', handlers.GetCartHandler, name='getCart', strict_slash=True),
+    RedirectRoute('/getPaymentData/', handlers.getPaymentDataHandler, name='getPaymentData', strict_slash=True),
 ]
 
 def get_routes():

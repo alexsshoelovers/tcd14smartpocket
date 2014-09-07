@@ -12,6 +12,14 @@
 {% endblock %}
 {% endblock %}
 {% block content %}
+<div style="float:left">
+<i class="icon-search icon-large icon-black"></i>
+</div>
+<div style="float:right">
+	<a href="/add_card/"class="btn btn-success">Add card</a>
+</div>
+	
+
 {% for card in cards %}
 	<table class="table">
 		<tr><td><a href='/pay/?cardId={{ card.cardId }}'>Pay</a></td><td>{{ card.cardEnding }}</td><td>{{ card.cardName }}</td><td>{{ card.cardType }}</td><td><img height="40px" src="http://www.mastercard.com/global/_assets/img/products/standard-cc-intro.png"></td><td>{{ card.email}}</td></tr>
